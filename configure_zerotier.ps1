@@ -90,11 +90,16 @@ else
         Write-Output "Configuring ZeroTier now."
         Write-Output "#########################"
         Write-Output ""
-        $ConfigStatus = (Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q join 632ea2908589098f" -Wait -PassThru).ExitCode
-        if ($ConfigStatus -eq 2)
+        $ConfigStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q join 632ea2908589098f | Out-String
+        if ($ConfigStatus -eq "200 join OK")
         {
             Write-Output "Successfully joined SHF ZeroTier network! Please contact your network admin with the above ID to enable this device."
             Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q set 632ea2908589098f allowDNS=1"
+            Set-NetConnectionProfile -InterfaceAlias ZeroTier* -NetworkCategory Private
+        }
+        else
+        {
+            Write-Output "Unable to join ZT network and configure settings. Please contact your network admin."
         }
     }
     else
