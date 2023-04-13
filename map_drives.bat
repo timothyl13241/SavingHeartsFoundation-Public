@@ -1,6 +1,7 @@
 @echo off
 cls
 echo ######################################################################################
+echo ########################    Saving Hearts Foundation     #############################
 echo ########################   Script to Set Mapped Drives   #############################
 echo ########################     Revision 1b (04/13/2023)    #############################
 echo ######################################################################################
@@ -9,8 +10,8 @@ set /p "usr=Enter username (SHF\): "
 set /p "passw=Enter %usr% password: "
 cmdkey /add:172.30.16.234 /user:SHF\%usr% /pass:%passw%
 net use * /delete /y
-net use S: \\172.30.16.234\UCLA_SHF_Data %usr% /user:SHF\tle.adm /p:yes
-net use U: \\172.30.16.234\UCLA_Deployment %usr% /user:SHF\tle.adm /p:yes
+net use S: \\172.30.16.234\UCLA_SHF_Data %passw% /user:SHF\%usr% /p:yes
+net use U: \\172.30.16.234\UCLA_Deployment %passw% /user:SHF\%usr% /p:yes
 pause
 echo ######################################################################################
 echo Here are the currently mapped drives:
