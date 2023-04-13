@@ -19,32 +19,40 @@ elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersio
 {
     Write-Output "ZeroTier is not up to date! Updating now..."
     #Download and install newer ZeroTier version.
-    Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "ZeroTier One.msi"
+    Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
     if (Test-Path "ZeroTier One.msi")
     {
-        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ZeroTier One.msi /qn" -Wait -PassThru).ExitCode
+        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i 'C:\ZeroTier One.msi' /qn" -Wait -PassThru).ExitCode
         if ($InstallStatus -eq 0)
         {
            $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
            echo "ZeroTier was updated successfully! Version $($ZT_ver[0].DisplayVersion) was installed."
         }
+        else
+        {
+            Write-Output "ZeroTier could not be updated."
+        }
     }
     else
     {
-        Write-Host "ZeroTier download failed!"
+        Write-Output "ZeroTier download failed!"
     }
 }
 else
 {
     Write-Output "ZeroTier is not installed! Installing and configuring now..."
-    Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "ZeroTier One.msi"
+    Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
     if (Test-Path "ZeroTier One.msi")
     {
-        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ZeroTier One.msi /qn" -Wait -PassThru).ExitCode
+        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i 'C:\ZeroTier One.msi' /qn" -Wait -PassThru).ExitCode
         if ($InstallStatus -eq 0)
         {
             $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
             echo "ZeroTier was installed successfully! Version $($ZT_ver[0].DisplayVersion) was installed."
+        }
+        else
+        {
+            Write-Output "ZeroTier could not be installed."
         }
         Write-Output ""
         Write-Output "#########################"
