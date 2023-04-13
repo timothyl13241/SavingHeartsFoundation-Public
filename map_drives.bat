@@ -18,7 +18,7 @@ net use
 
 echo ######################################################################################
 echo Copying Cardea Preferences File
-echo D | xcopy "U:\Preference Files\20230411_user.config" "C:\Users\timot\AppData\Local\Cardiac_Insight,_Inc\Cardea_20.20_ECG.exe_Url_bnysl1bxpkuhajiypxmozcfbiagw0412\5.0.1.6\user.config" /y /z
+echo D | xcopy "U:\Preference Files\20230411_user.config" %USERPROFILE%\AppData\Local\Cardiac_Insight,_Inc\Cardea_20.20_ECG.exe_Url_bnysl1bxpkuhajiypxmozcfbiagw0412\5.0.1.6\user.config /y /z
 echo:
 echo If the above failed, you need to import the preference file manually! 
 echo Otherwise, just check that the Data Acquisition location is set properly. 
