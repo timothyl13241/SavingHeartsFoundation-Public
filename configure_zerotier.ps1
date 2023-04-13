@@ -6,6 +6,16 @@ Write-Output "##################           Revision 1a (04/13/2023)       ######
 Write-Output "######################################################################################"
 Write-Output ""
 
+#Self-elevate the script if required.
+#(source: https://stackoverflow.com/questions/60209449/how-to-elevate-a-powershell-script-from-within-a-script)
+if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
+ if ([int](Get-CimInstance -Class Win32_OperatingSystem | Select-Object -ExpandProperty BuildNumber) -ge 6000) {
+  $CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
+  Start-Process -FilePath PowerShell.exe -Verb Runas -ArgumentList $CommandLine
+  Exit
+ }
+}
+
 #Set TLS Version.
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
 
