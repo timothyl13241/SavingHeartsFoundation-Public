@@ -113,3 +113,4 @@ else
 
 Write-Host ""
 Read-Host -Prompt "Press any key to continue"
+Remove-Item $PSCommandPath -Force
