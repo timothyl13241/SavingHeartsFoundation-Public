@@ -20,7 +20,7 @@ echo ###########################################################################
 echo Copying Cardea Preferences File
 echo D | xcopy "U:\Preference Files\20230411_user.config" %USERPROFILE%\AppData\Local\Cardiac_Insight,_Inc\Cardea_20.20_ECG.exe_Url_bnysl1bxpkuhajiypxmozcfbiagw0412\5.0.1.6\user.config /y /z
 echo:
-echo If the above failed, you need to import the preference file manually! 
-echo Otherwise, just check that the Data Acquisition location is set properly. 
+echo If the above failed (i.e. 0 files copied), you need to import the preference file manually! 
+echo Otherwise, if you see 1 file, just check that the Data Acquisition location is set properly. 
 pause
 exit /b 0
