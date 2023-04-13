@@ -25,37 +25,40 @@ $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentV
 #Define script-level variable for ZT ID
 $ZT_ID = "temp" | Out-String
 
-if ($ZT_ver[0].DisplayVersion -eq '1.10.6')
+if ($ZT_ver -ne $null)
 {
-    Write-Host "ZeroTier is up to date! Version " -NoNewline -ForegroundColor Green
-    Write-Host $ZT_ver[0].DisplayVersion -NoNewline -ForegroundColor Green
-    Write-Host " is installed." -ForegroundColor Green
-}
-elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersion -ne $null))
-{
-    Write-Output "ZeroTier is not up to date! Updating now..."
-    Write-Output ""
-    #Download and install newer ZeroTier version.
-    Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
-    if (Test-Path "C:\ZeroTier One.msi")
+    if ($ZT_ver[0].DisplayVersion -eq '1.10.6')
     {
-        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ""C:\ZeroTier One.msi"" /qn" -Wait -PassThru).ExitCode
-        if ($InstallStatus -eq 0)
+        Write-Host "ZeroTier is up to date! Version " -NoNewline -ForegroundColor Green
+        Write-Host $ZT_ver[0].DisplayVersion -NoNewline -ForegroundColor Green
+        Write-Host " is installed." -ForegroundColor Green
+    }
+    elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersion -ne $null))
+    {
+        Write-Output "ZeroTier is not up to date! Updating now..."
+        Write-Output ""
+        #Download and install newer ZeroTier version.
+        Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
+        if (Test-Path "C:\ZeroTier One.msi")
         {
-           $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
-           Write-Host "ZeroTier was updated successfully! Version " -NoNewline -ForegroundColor Green
-           Write-Host $($ZT_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
-           Write-Host " was installed." -ForegroundColor Green
-           Remove-Item "C:\ZeroTier One.msi"
+            $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ""C:\ZeroTier One.msi"" /qn" -Wait -PassThru).ExitCode
+            if ($InstallStatus -eq 0)
+            {
+               $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+               Write-Host "ZeroTier was updated successfully! Version " -NoNewline -ForegroundColor Green
+               Write-Host $($ZT_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
+               Write-Host " was installed." -ForegroundColor Green
+               Remove-Item "C:\ZeroTier One.msi"
+            }
+            else
+            {
+                Write-Output "ZeroTier could not be updated."
+            }
         }
         else
         {
-            Write-Output "ZeroTier could not be updated."
+            Write-Output "ZeroTier download failed!"
         }
-    }
-    else
-    {
-        Write-Output "ZeroTier download failed!"
     }
 }
 else
