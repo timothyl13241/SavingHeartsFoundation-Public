@@ -6,6 +6,10 @@ Write-Output "##################           Revision 1a (04/13/2023)       ######
 Write-Output "######################################################################################"
 Write-Output ""
 
+#Set TLS Version.
+[Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
+
+#Get installed ZeroTier version.
 $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
 if ($ZT_ver[0].DisplayVersion -eq '1.10.6')
 {
@@ -47,4 +51,4 @@ else
     
 }
 
-Read-Host -Prompt "Press any key to continue..."
+Read-Host -Prompt "Press any key to continue"
