@@ -5,11 +5,11 @@ echo ########################   Script to Set Mapped Drives   ##################
 echo ########################     Revision 1b (04/13/2023)    #############################
 echo ######################################################################################
 echo:
-set /p "passw=Enter Admin password: "
+set /p "passw=Enter SHF_USER password: "
 cmdkey /add:172.30.16.234 /user:SHF\tle.adm /pass:%passw%
 net use * /delete /y
-net use S: \\172.30.16.234\UCLA_SHF_Data %passw% /user:SHF\tle.adm /p:yes
-net use U: \\172.30.16.234\UCLA_Deployment %passw% /user:SHF\tle.adm /p:yes
+net use S: \\172.30.16.234\UCLA_SHF_Data %passw% /user:SHF\SHF_USER /p:yes
+net use U: \\172.30.16.234\UCLA_Deployment %passw% /user:SHF\SHF_USER /p:yes
 pause
 echo ######################################################################################
 echo Here are the currently mapped drives:
