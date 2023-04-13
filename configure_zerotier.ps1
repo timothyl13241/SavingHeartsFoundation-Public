@@ -21,9 +21,15 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 
 #Get installed ZeroTier version.
 $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+
+#Define script-level variable for ZT ID
+$ZT_ID = "temp" | Out-String
+
 if ($ZT_ver[0].DisplayVersion -eq '1.10.6')
 {
-    echo "ZeroTier is up to date! Version $($ZT_ver[0].DisplayVersion) is installed."
+    Write-Host "ZeroTier is up to date! Version " -NoNewline -ForegroundColor Green
+    Write-Host $ZT_ver[0].DisplayVersion -NoNewline -ForegroundColor Green
+    Write-Host " is installed." -ForegroundColor Green
 }
 elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersion -ne $null))
 {
@@ -37,7 +43,9 @@ elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersio
         if ($InstallStatus -eq 0)
         {
            $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
-           echo "ZeroTier was updated successfully! Version $($ZT_ver[0].DisplayVersion) was installed."
+           Write-Host "ZeroTier was updated successfully! Version " -NoNewline -ForegroundColor Green
+           Write-Host $($ZT_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
+           Write-Host " was installed." -ForegroundColor Green
            Remove-Item "C:\ZeroTier One.msi"
         }
         else
@@ -61,8 +69,13 @@ else
         if ($InstallStatus -eq 0)
         {
             $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
-            echo "ZeroTier was installed successfully! Version $($ZT_ver[0].DisplayVersion) was installed. Your ID is shown below."
-            C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q info
+            Write-Host "ZeroTier was installed successfully! Version " -NoNewline -ForegroundColor Green
+            Write-Host $($ZT_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
+            Write-Host " was installed. Your ID is: " -NoNewline -ForegroundColor Green
+            $info = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q info | Out-String
+            $ZT_ID = $info.Substring(9, 10)
+            Write-Host $ZT_ID -NoNewline -ForegroundColor Green
+            Write-Host "."
             Remove-Item "C:\ZeroTier One.msi"
         }
         else
@@ -77,7 +90,7 @@ else
         $ConfigStatus = (Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q join 632ea2908589098f" -Wait -PassThru).ExitCode
         if ($ConfigStatus -eq 2)
         {
-            Write-Output "Successfully joined SHF ZeroTier network! Please contact your network admin to enable this device."
+            Write-Output "Successfully joined SHF ZeroTier network! Please contact your network admin with the above ID to enable this device."
             Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q set 632ea2908589098f allowDNS=1"
         }
     }
