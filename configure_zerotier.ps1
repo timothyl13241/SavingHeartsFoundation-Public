@@ -22,7 +22,7 @@ elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersio
     Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
     if (Test-Path "C:\ZeroTier One.msi")
     {
-        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i 'C:\ZeroTier One.msi' /qn" -Wait -PassThru).ExitCode
+        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ""C:\ZeroTier One.msi"" /qn" -Wait -PassThru).ExitCode
         if ($InstallStatus -eq 0)
         {
            $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
@@ -45,7 +45,7 @@ else
     Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
     if (Test-Path "C:\ZeroTier One.msi")
     {
-        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i 'C:\ZeroTier One.msi' /qn" -Wait -PassThru).ExitCode
+        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ""C:\ZeroTier One.msi"" /qn" -Wait -PassThru).ExitCode
         if ($InstallStatus -eq 0)
         {
             $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
