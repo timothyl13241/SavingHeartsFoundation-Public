@@ -28,6 +28,7 @@ if ($ZT_ver[0].DisplayVersion -eq '1.10.6')
 elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersion -ne $null))
 {
     Write-Output "ZeroTier is not up to date! Updating now..."
+    Write-Output ""
     #Download and install newer ZeroTier version.
     Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
     if (Test-Path "C:\ZeroTier One.msi")
@@ -52,6 +53,7 @@ elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersio
 else
 {
     Write-Output "ZeroTier is not installed! Installing and configuring now..."
+    Write-Output ""
     Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
     if (Test-Path "C:\ZeroTier One.msi")
     {
@@ -59,7 +61,8 @@ else
         if ($InstallStatus -eq 0)
         {
             $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
-            echo "ZeroTier was installed successfully! Version $($ZT_ver[0].DisplayVersion) was installed."
+            echo "ZeroTier was installed successfully! Version $($ZT_ver[0].DisplayVersion) was installed. Your ID is shown below."
+            C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q info
             Remove-Item "C:\ZeroTier One.msi"
         }
         else
@@ -84,4 +87,5 @@ else
     }
 }
 
+Write-Output ""
 Read-Host -Prompt "Press any key to continue"
