@@ -91,7 +91,7 @@ else
         Write-Output "#########################"
         Write-Output ""
         $ConfigStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q join 632ea2908589098f | Out-String
-        if ($ConfigStatus -eq "200 join OK")
+        if ($ConfigStatus.Trim() -eq "200 join OK")
         {
             Write-Output "Successfully joined SHF ZeroTier network! Please contact your network admin with the above ID to enable this device."
             Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q set 632ea2908589098f allowDNS=1"
