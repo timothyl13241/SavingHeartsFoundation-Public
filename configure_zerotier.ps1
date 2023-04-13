@@ -1,10 +1,10 @@
 Clear-Host
-Write-Output "######################################################################################"
-Write-Output "##################           Saving Hearts Foundation       ##########################"
-Write-Output "##################     ZeroTier Install and Config Script   ##########################"
-Write-Output "##################           Revision 1a (04/13/2023)       ##########################"
-Write-Output "######################################################################################"
-Write-Output ""
+Write-Host "######################################################################################"
+Write-Host "##################           Saving Hearts Foundation       ##########################"
+Write-Host "##################     ZeroTier Install and Config Script   ##########################"
+Write-Host "##################           Revision 1a (04/13/2023)       ##########################"
+Write-Host "######################################################################################"
+Write-Host ""
 
 #Self-elevate the script if required.
 #(source: https://stackoverflow.com/questions/60209449/how-to-elevate-a-powershell-script-from-within-a-script)
@@ -35,8 +35,8 @@ if ($ZT_ver -ne $null)
     }
     elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersion -ne $null))
     {
-        Write-Output "ZeroTier is not up to date! Updating now..."
-        Write-Output ""
+        Write-Host "ZeroTier is not up to date! Updating now..." -ForegroundColor Yellow
+        Write-Host ""
         #Download and install newer ZeroTier version.
         Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
         if (Test-Path "C:\ZeroTier One.msi")
@@ -52,7 +52,7 @@ if ($ZT_ver -ne $null)
             }
             else
             {
-                Write-Output "ZeroTier could not be updated."
+                Write-Host "ZeroTier could not be updated." -ForegroundColor Red
             }
         }
         else
@@ -63,8 +63,8 @@ if ($ZT_ver -ne $null)
 }
 else
 {
-    Write-Output "ZeroTier is not installed! Installing and configuring now..."
-    Write-Output ""
+    Write-Host "ZeroTier is not installed! Installing and configuring now..."
+    Write-Host ""
     Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
     if (Test-Path "C:\ZeroTier One.msi")
     {
@@ -80,27 +80,30 @@ else
             Write-Host $ZT_ID -NoNewline -ForegroundColor Green
             Write-Host "."
             Remove-Item "C:\ZeroTier One.msi"
+
+            Write-Host ""
+            Write-Host "#########################"
+            Write-Host "Configuring ZeroTier now."
+            Write-Host "#########################"
+            Write-Host ""
+            $ConfigStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q join 632ea2908589098f | Out-String
+            if ($ConfigStatus.Trim() -eq "200 join OK")
+            {
+                Write-Host "Successfully joined SHF ZeroTier network!" -ForegroundColor Green
+                Write-Host "Please contact your network admin with the above ID to enable this device." -ForegroundColor Green
+                Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q set 632ea2908589098f allowDNS=1"
+                Set-NetConnectionProfile -InterfaceAlias ZeroTier* -NetworkCategory Private
+            }
+            else
+            {
+                Write-Host "Unable to join ZT network and configure settings. Please contact your network admin." -ForegroundColor Red
+            }
         }
         else
         {
-            Write-Output "ZeroTier could not be installed."
+            Write-Host "ZeroTier could not be installed." -ForegroundColor Red
         }
-        Write-Output ""
-        Write-Output "#########################"
-        Write-Output "Configuring ZeroTier now."
-        Write-Output "#########################"
-        Write-Output ""
-        $ConfigStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q join 632ea2908589098f | Out-String
-        if ($ConfigStatus.Trim() -eq "200 join OK")
-        {
-            Write-Output "Successfully joined SHF ZeroTier network! Please contact your network admin with the above ID to enable this device."
-            Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q set 632ea2908589098f allowDNS=1"
-            Set-NetConnectionProfile -InterfaceAlias ZeroTier* -NetworkCategory Private
-        }
-        else
-        {
-            Write-Output "Unable to join ZT network and configure settings. Please contact your network admin."
-        }
+        
     }
     else
     {
@@ -108,5 +111,5 @@ else
     }
 }
 
-Write-Output ""
+Write-Host ""
 Read-Host -Prompt "Press any key to continue"
