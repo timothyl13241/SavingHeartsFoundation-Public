@@ -8,7 +8,7 @@ Write-Host ""
 
 Write-Host "Computer Name: " -NoNewline; Write-Host $env:computername
 Write-Host "Operating System: " -NoNewline; [System.Environment]::OSVersion.Version | Write-Host
-Write-Host "Processor Architecture: " -NoNewline; Get-WmiObject win32_operatingsystem | select osarchitecture | Write-Host
+Write-Host "OS Architecture: " -NoNewline; (Get-WmiObject win32_operatingsystem | select osarchitecture).osarchitecture | Write-Host
 Write-Host ""
 Write-Host "######################################################################################"
 Write-Host ""
