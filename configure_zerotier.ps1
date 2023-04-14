@@ -6,6 +6,13 @@ Write-Host "##################           Revision 1a (04/13/2023)       ########
 Write-Host "######################################################################################"
 Write-Host ""
 
+Write-Host "Computer Name: " -NoNewline; Write-Host $env:computername
+Write-Host "Operating System: " -NoNewline; [System.Environment]::OSVersion.Version | Write-Host
+Write-Host "Processor Architecture: " -NoNewline; Get-WmiObject win32_operatingsystem | select osarchitecture | Write-Host
+Write-Host ""
+Write-Host "######################################################################################"
+Write-Host ""
+
 #Self-elevate the script if required.
 #(source: https://stackoverflow.com/questions/60209449/how-to-elevate-a-powershell-script-from-within-a-script)
 if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator')) {
