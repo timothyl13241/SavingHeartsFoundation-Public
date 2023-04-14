@@ -6,6 +6,19 @@ echo ########################   Script to Set Mapped Drives   ##################
 echo ########################     Revision 1b (04/13/2023)    #############################
 echo ######################################################################################
 echo:
+echo %ComputerName%
+setlocal
+for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
+if "%version%" == "10.0" echo Windows 10
+if "%version%" == "6.3" echo Windows 8.1
+if "%version%" == "6.2" echo Windows 8.
+if "%version%" == "6.1" echo Windows 7.
+if "%version%" == "6.0" echo Windows Vista.
+rem etc etc
+endlocal
+echo:
+echo ######################################################################################
+echo:
 set /p "usr=Enter username (SHF\): "
 set /p "passw=Enter %usr% password: "
 cmdkey /add:172.30.16.234 /user:SHF\%usr% /pass:%passw%
