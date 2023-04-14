@@ -20,7 +20,14 @@ if (-Not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
 [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls"
 
 #Get installed ZeroTier version.
-$ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+if ((Get-WmiObject win32_operatingsystem | select osarchitecture).osarchitecture -like "64*")
+{
+    $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+}
+else
+{
+        $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+}
 
 #Define script-level variable for ZT ID
 $ZT_ID = "temp" | Out-String
