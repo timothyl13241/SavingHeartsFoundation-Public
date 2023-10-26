@@ -33,7 +33,7 @@ if ((Get-WmiObject win32_operatingsystem | select osarchitecture).osarchitecture
 }
 else
 {
-        $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+    $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
 }
 
 #Define script-level variable for ZT ID
@@ -83,8 +83,8 @@ else
     Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
     if (Test-Path "C:\ZeroTier One.msi")
     {
-        $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ""C:\ZeroTier One.msi"" /qn" -Wait -PassThru).ExitCode
-        if ($InstallStatus -eq 0)
+        $ZTInstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ""C:\ZeroTier One.msi"" /qn" -Wait -PassThru).ExitCode
+        if ($ZTInstallStatus -eq 0)
         {
             $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
             Write-Host "ZeroTier was installed successfully! Version " -NoNewline -ForegroundColor Green
@@ -134,6 +134,48 @@ else
     else
     {
         Write-Host "ZeroTier download failed!"
+    }
+}
+
+#Get installed ManageEngine version.
+if ((Get-WmiObject win32_operatingsystem | select osarchitecture).osarchitecture -like "64*")
+{
+    $UEMS_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
+}
+else
+{
+    $UEMS_ver = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
+}
+
+if ($UEMS_ver -ne $null)
+{
+    Write-Host "ManageEngine Agent Version " -NoNewline -ForegroundColor Green
+    Write-Host $UEMS_ver[0].DisplayVersion -NoNewline -ForegroundColor Green
+    Write-Host " is installed." -ForegroundColor Green
+}
+else
+{
+    Invoke-WebRequest -Uri "https://desktopcentral.manageengine.com/download?encapiKey=wSsVR6118hf4Da99yjKkL%2Bc7nlxXVV2jQU15jlPzunapHf7LpcdonxedVAKiGfAXFDQ%2FRTIXrbt8nEtSgDQH3t0uyVoEXSiF9mqRe1U4J3x1o7q7xDPKXm8%3D&os=Windows" -OutFile "C:\MOBILENET_Agent.exe"
+    if (Test-Path "C:\MOBILENET_Agent.exe")
+        {
+            $UEMSInstallStatus = (Start-Process -FilePath "C:\MOBILENET_Agent.exe" -ArgumentList "/silent" -Wait -PassThru).ExitCode
+            if ($UEMSInstallStatus -eq 0)
+            {
+               $UEMS_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
+               Write-Host "ManageEngine agent was installed successfully! Version " -NoNewline -ForegroundColor Green
+               Write-Host $($UEMS_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
+               Write-Host " was installed." -ForegroundColor Green
+               Remove-Item "C:\MOBILENET_Agent.exe"
+            }
+            else
+            {
+                Write-Host "ManageEngine agent could not be updated." -ForegroundColor Red
+            }
+        }
+        else
+        {
+            Write-Output "ManageEngine download failed!"
+        }
     }
 }
 
