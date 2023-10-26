@@ -75,6 +75,19 @@ if ($ZT_ver -ne $null)
             Write-Output "ZeroTier download failed!"
         }
     }
+    #Check if moons are orbited.
+    $NetStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q listmoons | Out-String
+    if ($NetStatus.Trim() -eq '')
+    {
+        Write-Host "Custom moons have not yet been orbited!"
+        Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q orbit 7549d395fe 7549d395fe"
+        Write-Host "Added moons to orbit."
+    }
+    else
+    {
+        Write-Host "Custom moons already orbited!"
+        Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q deorbit 85fb50d876"
+    }
 }
 else
 {
@@ -155,27 +168,27 @@ if ($UEMS_ver -ne $null)
 }
 else
 {
+    #Download and install UEMS Agent. 
     Invoke-WebRequest -Uri "https://desktopcentral.manageengine.com/download?encapiKey=wSsVR6118hf4Da99yjKkL%2Bc7nlxXVV2jQU15jlPzunapHf7LpcdonxedVAKiGfAXFDQ%2FRTIXrbt8nEtSgDQH3t0uyVoEXSiF9mqRe1U4J3x1o7q7xDPKXm8%3D&os=Windows" -OutFile "C:\MOBILENET_Agent.exe"
     if (Test-Path "C:\MOBILENET_Agent.exe")
+    {
+        $UEMSInstallStatus = (Start-Process -FilePath "C:\MOBILENET_Agent.exe" -ArgumentList "/silent" -Wait -PassThru).ExitCode
+        if ($UEMSInstallStatus -eq 0)
         {
-            $UEMSInstallStatus = (Start-Process -FilePath "C:\MOBILENET_Agent.exe" -ArgumentList "/silent" -Wait -PassThru).ExitCode
-            if ($UEMSInstallStatus -eq 0)
-            {
-               $UEMS_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
-               Write-Host "ManageEngine agent was installed successfully! Version " -NoNewline -ForegroundColor Green
-               Write-Host $($UEMS_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
-               Write-Host " was installed." -ForegroundColor Green
-               Remove-Item "C:\MOBILENET_Agent.exe"
-            }
-            else
-            {
-                Write-Host "ManageEngine agent could not be updated." -ForegroundColor Red
-            }
+            $UEMS_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
+            Write-Host "ManageEngine agent was installed successfully! Version " -NoNewline -ForegroundColor Green
+            Write-Host $($UEMS_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
+            Write-Host " was installed." -ForegroundColor Green
+            Remove-Item "C:\MOBILENET_Agent.exe"
         }
         else
         {
-            Write-Output "ManageEngine download failed!"
+            Write-Host "ManageEngine agent could not be updated." -ForegroundColor Red
         }
+    }
+    else
+    {
+        Write-Output "ManageEngine download failed!"
     }
 }
 
