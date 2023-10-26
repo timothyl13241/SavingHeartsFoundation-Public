@@ -12,7 +12,7 @@ Clear-Host
 Write-Host "######################################################################################"
 Write-Host "##################           Saving Hearts Foundation       ##########################"
 Write-Host "##################     ZeroTier Install and Config Script   ##########################"
-Write-Host "##################           Revision 1a (04/13/2023)       ##########################"
+Write-Host "##################           Revision 1b (10/25/2023)       ##########################"
 Write-Host "######################################################################################"
 Write-Host ""
 
@@ -38,16 +38,17 @@ else
 
 #Define script-level variable for ZT ID
 $ZT_ID = "temp" | Out-String
+$ZT_CurrVer = '1.12.2'
 
 if ($ZT_ver -ne $null)
 {
-    if ($ZT_ver[0].DisplayVersion -eq '1.10.6')
+    if ($ZT_ver[0].DisplayVersion -eq $ZT_CurrVer)
     {
         Write-Host "ZeroTier is up to date! Version " -NoNewline -ForegroundColor Green
         Write-Host $ZT_ver[0].DisplayVersion -NoNewline -ForegroundColor Green
         Write-Host " is installed." -ForegroundColor Green
     }
-    elseif (($ZT_ver[0].DisplayVersion -ne '1.10.6' ) -and ($ZT_ver[0].DisplayVersion -ne $null))
+    elseif (($ZT_ver[0].DisplayVersion -ne $ZT_CurrVer ) -and ($ZT_ver[0].DisplayVersion -ne $null))
     {
         Write-Host "ZeroTier is not up to date! Updating now..." -ForegroundColor Yellow
         Write-Host ""
@@ -111,6 +112,17 @@ else
             else
             {
                 Write-Host "Unable to join ZT network and configure settings. Please contact your network admin." -ForegroundColor Red
+            }
+
+            $NetStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q listmoons | Out-String
+            if ($NetStatus.Trim() -eq '')
+            {
+                Write-Host "Custom moons have not yet been orbited!"
+                Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q orbit 7549d395fe 7549d395fe"
+            }
+            else
+            {
+                Write-Host "Custom moons already orbited!"
             }
         }
         else
