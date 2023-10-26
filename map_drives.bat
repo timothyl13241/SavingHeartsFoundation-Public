@@ -3,7 +3,7 @@ cls
 echo ######################################################################################
 echo ########################    Saving Hearts Foundation     #############################
 echo ########################   Script to Set Mapped Drives   #############################
-echo ########################     Revision 1b (04/13/2023)    #############################
+echo ########################     Revision 1c (10/25/2023)    #############################
 echo ######################################################################################
 echo:
 echo %ComputerName%
@@ -33,7 +33,7 @@ net use
 
 echo ######################################################################################
 echo Copying Cardea Preferences File
-for /D %%D in ("%USERPROFILE%\AppData\Local\Cardiac_Insight,_Inc\*") do (echo F | xcopy "U:\Preference Files\20230411_user.config" "%%~D\5.0.1.6\user.config" /y /z)
+for /D %%D in ("%USERPROFILE%\AppData\Local\Cardiac_Insight,_Inc\*") do (echo F | xcopy "U:\Preference Files\20231028_user.config" "%%~D\5.0.1.6\user.config" /y /z)
 echo:
 echo If the above failed (i.e. 0 files copied), you need to import the preference file manually! 
 echo Otherwise, if you see 1 file, just check that the Data Acquisition location is set properly.
