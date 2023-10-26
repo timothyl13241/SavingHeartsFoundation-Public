@@ -80,13 +80,13 @@ if ($ZT_ver -ne $null)
     if ($NetStatus.Trim() -eq '')
     {
         Write-Host "Custom moons have not yet been orbited!"
-        Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q orbit 7549d395fe 7549d395fe"
+        Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q orbit 7549d395fe 7549d395fe" -Wait
         Write-Host "Added moons to orbit."
     }
     else
     {
         Write-Host "Custom moons already orbited!"
-        Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q deorbit 85fb50d876"
+        Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q deorbit 85fb50d876" -Wait
     }
 }
 else
@@ -150,6 +150,8 @@ else
     }
 }
 
+Write-Host ""
+
 #Get installed ManageEngine version.
 if ((Get-WmiObject win32_operatingsystem | select osarchitecture).osarchitecture -like "64*")
 {
@@ -169,6 +171,7 @@ if ($UEMS_ver -ne $null)
 else
 {
     #Download and install UEMS Agent. 
+    Write-Host "Installing ManageEngine Agent!"
     Invoke-WebRequest -Uri "https://desktopcentral.manageengine.com/download?encapiKey=wSsVR6118hf4Da99yjKkL%2Bc7nlxXVV2jQU15jlPzunapHf7LpcdonxedVAKiGfAXFDQ%2FRTIXrbt8nEtSgDQH3t0uyVoEXSiF9mqRe1U4J3x1o7q7xDPKXm8%3D&os=Windows" -OutFile "C:\MOBILENET_Agent.exe"
     if (Test-Path "C:\MOBILENET_Agent.exe")
     {
