@@ -163,7 +163,7 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/timothyle97/SavingHear
 Write-Host ""
 Write-Host "Restarting ZeroTier. Waiting 30 seconds..."
 Restart-Service -DisplayName "ZeroTier*" -ErrorAction SilentlyContinue
-Start-Sleep -Seconds 30
+Start-Sleep -Seconds 10
 
 while ((Get-Service -DisplayName "ZeroTier*").Status -ne "Running")
 {
