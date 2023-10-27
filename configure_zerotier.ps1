@@ -158,7 +158,8 @@ else
 
 Write-Host ""
 Write-Host "Downloading ZeroTier local confiugration file"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/timothyle97/SavingHeartsFoundation-Public/main/local.conf" -OutFile "C:\ProgramData\ZeroTier\One\local.conf"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/timothyle97/SavingHeartsFoundation-Public/main/local.conf" -OutFile "C:\local.conf"
+Move-Item -Path C:\local.conf -Destination C:\ProgramData\ZeroTier\One\local.conf -Force 
 
 Write-Host ""
 Write-Host "Restarting ZeroTier. Waiting 30 seconds..."
