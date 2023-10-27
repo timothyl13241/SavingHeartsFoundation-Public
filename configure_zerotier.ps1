@@ -29,12 +29,16 @@ Write-Host ""
 #Get installed ZeroTier version.
 if ((Get-WmiObject win32_operatingsystem | select osarchitecture).osarchitecture -like "64*")
 {
-    $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+    $RegPath = "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
+    $ZT_path = "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe"
 }
 else
 {
-    $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+    $RegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
+    $ZT_path = "C:\ProgramData\ZeroTier\One\zerotier-one_x86.exe"
 }
+
+$ZT_ver = Get-ItemProperty $RegPath | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
 
 #Define script-level variable for ZT ID
 $ZT_ID = "temp" | Out-String
@@ -59,11 +63,11 @@ if ($ZT_ver -ne $null)
             $InstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ""C:\ZeroTier One.msi"" /qn" -Wait -PassThru).ExitCode
             if ($InstallStatus -eq 0)
             {
-               $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
-               Write-Host "ZeroTier was updated successfully! Version " -NoNewline -ForegroundColor Green
-               Write-Host $($ZT_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
-               Write-Host " was installed." -ForegroundColor Green
-               Remove-Item "C:\ZeroTier One.msi"
+                $ZT_ver = Get-ItemProperty $RegPath | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+                Write-Host "ZeroTier was updated successfully! Version " -NoNewline -ForegroundColor Green
+                Write-Host $($ZT_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
+                Write-Host " was installed." -ForegroundColor Green
+                Remove-Item "C:\ZeroTier One.msi"
             }
             else
             {
@@ -80,13 +84,13 @@ if ($ZT_ver -ne $null)
     if ($NetStatus.Trim() -eq '')
     {
         Write-Host "Custom moons have not yet been orbited!"
-        Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q orbit 7549d395fe 7549d395fe" -Wait
+        Start-Process -FilePath $ZT_path -ArgumentList "-q orbit 7549d395fe 7549d395fe" -Wait
         Write-Host "Added moons to orbit."
     }
     else
     {
         Write-Host "Custom moons already orbited!"
-        Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q deorbit 85fb50d876" -Wait
+        Start-Process -FilePath $ZT_path -ArgumentList "-q deorbit 85fb50d876" -Wait
     }
 }
 else
@@ -99,11 +103,11 @@ else
         $ZTInstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i ""C:\ZeroTier One.msi"" /qn" -Wait -PassThru).ExitCode
         if ($ZTInstallStatus -eq 0)
         {
-            $ZT_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
+            $ZT_ver = Get-ItemProperty $RegPath | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
             Write-Host "ZeroTier was installed successfully! Version " -NoNewline -ForegroundColor Green
             Write-Host $($ZT_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
             Write-Host " was installed. Your ID is: " -NoNewline -ForegroundColor Green
-            $info = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q info | Out-String
+            $info = $ZT_path -q info | Out-String
             $ZT_ID = $info.Substring(9, 10)
             Write-Host $ZT_ID -NoNewline -ForegroundColor Green
             Write-Host "."
@@ -119,7 +123,7 @@ else
             {
                 Write-Host "Successfully joined SHF ZeroTier network!" -ForegroundColor Green
                 Write-Host "Please contact your network admin with the above ID to enable this device." -ForegroundColor Green
-                Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q set 632ea2908589098f allowDNS=1"
+                Start-Process -FilePath $ZT_path -ArgumentList "-q set 632ea2908589098f allowDNS=1"
                 Set-NetConnectionProfile -InterfaceAlias ZeroTier* -NetworkCategory Private
             }
             else
@@ -127,11 +131,11 @@ else
                 Write-Host "Unable to join ZT network and configure settings. Please contact your network admin." -ForegroundColor Red
             }
 
-            $NetStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q listmoons | Out-String
+            $NetStatus = $ZT_path -q listmoons | Out-String
             if ($NetStatus.Trim() -eq '')
             {
                 Write-Host "Custom moons have not yet been orbited!"
-                Start-Process -FilePath "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe" -ArgumentList "-q orbit 7549d395fe 7549d395fe"
+                Start-Process -FilePath $ZT_path -ArgumentList "-q orbit 7549d395fe 7549d395fe"
             }
             else
             {
@@ -152,12 +156,12 @@ else
 
 Write-Host ""
 Write-Host "Downloading ZeroTier local confiugration file"
-Invoke-WebRequest -Uri "https://github.com/timothyle97/SavingHeartsFoundation-Public/blob/693f17e18267eba2e3bdf05484840069d624a7b1/local.conf" -OutFile "C:\ProgramData\ZeroTier\One\local.conf.test"
+Invoke-WebRequest -Uri "https://github.com/timothyle97/SavingHeartsFoundation-Public/blob/693f17e18267eba2e3bdf05484840069d624a7b1/local.conf" -OutFile "C:\ProgramData\ZeroTier\One\local.conf"
 
 Write-Host ""
-Write-Host "Restarting ZeroTier. Waiting 30 seconds."
+Write-Host "Restarting ZeroTier. Waiting 30 seconds..."
 Restart-Service -DisplayName "ZeroTier*"
-Start-Sleep -Seconds 10
+Start-Sleep -Seconds 30
 if ((Get-Service -DisplayName "ZeroTier*").Status -ne "Running")
 {
     Start-Service -DisplayName "ZeroTier*"
