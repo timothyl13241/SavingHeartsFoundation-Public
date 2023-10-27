@@ -162,12 +162,16 @@ Invoke-WebRequest -Uri "https://github.com/timothyle97/SavingHeartsFoundation-Pu
 
 Write-Host ""
 Write-Host "Restarting ZeroTier. Waiting 30 seconds..."
-Restart-Service -DisplayName "ZeroTier*"
+Restart-Service -DisplayName "ZeroTier*" -ErrorAction SilentlyContinue
 Start-Sleep -Seconds 30
+
 while ((Get-Service -DisplayName "ZeroTier*").Status -ne "Running")
 {
-    Start-Service -DisplayName "ZeroTier*"
+    Write-Host "Attempting to restart ZeroTier..."
+    Start-Service -DisplayName "ZeroTier*" -ErrorAction SilentlyContinue
 }
+
+Write-Host "ZeroTier successfully restarted." -ForegroundColor Green
 
 Write-Host ""
 
