@@ -80,7 +80,7 @@ if ($ZT_ver -ne $null)
         }
     }
     #Check if moons are orbited.
-    $NetStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q listmoons | Out-String
+    $NetStatus = & $ZT_path -q listmoons | Out-String
     if ($NetStatus.Trim() -eq '')
     {
         Write-Host "Custom moons have not yet been orbited!"
