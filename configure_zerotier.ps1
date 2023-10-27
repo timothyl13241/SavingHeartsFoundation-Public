@@ -151,6 +151,19 @@ else
 }
 
 Write-Host ""
+Write-Host "Downloading ZeroTier local confiugration file"
+Invoke-WebRequest -Uri "https://github.com/timothyle97/SavingHeartsFoundation-Public/blob/693f17e18267eba2e3bdf05484840069d624a7b1/local.conf" -OutFile "C:\ProgramData\ZeroTier\One\local.conf.test"
+
+Write-Host ""
+Write-Host "Restarting ZeroTier. Waiting 30 seconds."
+Restart-Service -DisplayName "ZeroTier*"
+Start-Sleep -Seconds 10
+if ((Get-Service -DisplayName "ZeroTier*").Status -ne "Running")
+{
+    Start-Service -DisplayName "ZeroTier*"
+}
+
+Write-Host ""
 
 #Get installed ManageEngine version.
 if ((Get-WmiObject win32_operatingsystem | select osarchitecture).osarchitecture -like "64*")
