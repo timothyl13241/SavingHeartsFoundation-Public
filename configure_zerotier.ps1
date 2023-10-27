@@ -31,11 +31,13 @@ if ((Get-WmiObject win32_operatingsystem | select osarchitecture).osarchitecture
 {
     $RegPath = "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
     $ZT_path = "C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe"
+    $UEMSRegPath = "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
 }
 else
 {
     $RegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
     $ZT_path = "C:\ProgramData\ZeroTier\One\zerotier-one_x86.exe"
+    $UEMSRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*"
 }
 
 $ZT_ver = Get-ItemProperty $RegPath | Where-Object {$_.DisplayName -like "*zerotier*"} | Select-Object DisplayVersion
@@ -170,14 +172,7 @@ if ((Get-Service -DisplayName "ZeroTier*").Status -ne "Running")
 Write-Host ""
 
 #Get installed ManageEngine version.
-if ((Get-WmiObject win32_operatingsystem | select osarchitecture).osarchitecture -like "64*")
-{
-    $UEMS_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
-}
-else
-{
-    $UEMS_ver = Get-ItemProperty HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
-}
+$UEMS_ver = Get-ItemProperty $UEMSRegPath | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
 
 if ($UEMS_ver -ne $null)
 {
@@ -195,7 +190,7 @@ else
         $UEMSInstallStatus = (Start-Process -FilePath "C:\MOBILENET_Agent.exe" -ArgumentList "/silent" -Wait -PassThru).ExitCode
         if ($UEMSInstallStatus -eq 0)
         {
-            $UEMS_ver = Get-ItemProperty HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
+            $UEMS_ver = Get-ItemProperty $UEMSRegPath | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
             Write-Host "ManageEngine agent was installed successfully! Version " -NoNewline -ForegroundColor Green
             Write-Host $($UEMS_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
             Write-Host " was installed." -ForegroundColor Green
