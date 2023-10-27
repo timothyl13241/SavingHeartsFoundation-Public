@@ -164,7 +164,7 @@ Write-Host ""
 Write-Host "Restarting ZeroTier. Waiting 30 seconds..."
 Restart-Service -DisplayName "ZeroTier*"
 Start-Sleep -Seconds 30
-if ((Get-Service -DisplayName "ZeroTier*").Status -ne "Running")
+while ((Get-Service -DisplayName "ZeroTier*").Status -ne "Running")
 {
     Start-Service -DisplayName "ZeroTier*"
 }
