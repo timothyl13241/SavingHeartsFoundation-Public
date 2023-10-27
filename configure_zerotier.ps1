@@ -107,7 +107,7 @@ else
             Write-Host "ZeroTier was installed successfully! Version " -NoNewline -ForegroundColor Green
             Write-Host $($ZT_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
             Write-Host " was installed. Your ID is: " -NoNewline -ForegroundColor Green
-            $info = $ZT_path -q info | Out-String
+            $info = & $ZT_path -q info | Out-String
             $ZT_ID = $info.Substring(9, 10)
             Write-Host $ZT_ID -NoNewline -ForegroundColor Green
             Write-Host "."
@@ -131,7 +131,7 @@ else
                 Write-Host "Unable to join ZT network and configure settings. Please contact your network admin." -ForegroundColor Red
             }
 
-            $NetStatus = $ZT_path -q listmoons | Out-String
+            $NetStatus = & $ZT_path -q listmoons | Out-String
             if ($NetStatus.Trim() -eq '')
             {
                 Write-Host "Custom moons have not yet been orbited!"
