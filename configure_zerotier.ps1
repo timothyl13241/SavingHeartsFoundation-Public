@@ -157,7 +157,7 @@ else
 }
 
 Write-Host ""
-Write-Host "Downloading ZeroTier local confiugration file"
+Write-Host "Downloading ZeroTier local configuration file"
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/timothyle97/SavingHeartsFoundation-Public/main/local.conf" -OutFile "C:\local.conf"
 Move-Item -Path C:\local.conf -Destination C:\ProgramData\ZeroTier\One\local.conf -Force 
 
