@@ -35,7 +35,7 @@ echo "AllowHybridSleep=no" >> /etc/systemd/sleep.conf
 
 echo "Add WiFi network..."
 read -p "Enter AP1764 password: " pass
-nmcli device wifi connect "AP1764" password "$pass" iface wlan0
+nmcli device wifi connect "AP1764" password "$pass"
 
 echo "Configuration complete."
 echo "Reboot? Press enter to drop to terminal [r]"
