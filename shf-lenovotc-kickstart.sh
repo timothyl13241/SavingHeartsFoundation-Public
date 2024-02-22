@@ -38,3 +38,14 @@ read -p "Enter AP1764 password: " pass
 nmcli device wifi connect "AP1764" password "$pass" iface wlan0
 
 echo "Configuration complete."
+echo "Reboot? Press enter to drop to terminal [r]"
+read SD
+
+if [ `echo $SD | egrep 'r'` ]; then
+	rm shf-lenovotc-kickstart.sh > /dev/null 2>&1
+	reboot now
+else
+	echo "Remove script files manually."
+fi
+
+exit 0
