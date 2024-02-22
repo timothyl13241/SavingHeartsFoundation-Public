@@ -8,7 +8,7 @@
 #         <timothy.le@savingheartsfoundation.com>
 #
 
-file="/home/ubuntu.remmina/SHF.remmina"
+file="/home/ubuntu/.remmina/SHF.remmina"
 rip=$(cat "$file" | grep server | cut -d '=' -f2,4)
 
 while ! ping -c 4 $rip > /dev/null; 
