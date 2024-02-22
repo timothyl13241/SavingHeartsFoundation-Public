@@ -17,5 +17,5 @@ echo "The VM host at $rip is not available yet."
 sleep 1 
 done
 
-echo "VM host $rip is now available. Starting Remmina"
+echo "VM host $rip is now available. Starting Remmina."
 remmina -c /home/ubuntu/.remmina/SHF.remmina
