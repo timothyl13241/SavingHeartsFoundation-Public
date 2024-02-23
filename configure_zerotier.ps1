@@ -12,7 +12,7 @@ Clear-Host
 Write-Host "######################################################################################"
 Write-Host "##################           Saving Hearts Foundation       ##########################"
 Write-Host "##################     ZeroTier Install and Config Script   ##########################"
-Write-Host "##################           Revision 1c (10/25/2023)       ##########################"
+Write-Host "##################           Revision 1d (02/23/2024)       ##########################"
 Write-Host "######################################################################################"
 Write-Host ""
 
@@ -221,7 +221,7 @@ if (Test-Path "C:\AteraAgent.msi")
     if ($ATERAInstallStatus -eq 0)
     {
         Write-Host "ATERA Agent installed successfully!" -ForegroundColor Green
-        Remove-Item "C:\AteraAgent.exe"
+        Remove-Item "C:\AteraAgent.msi"
     }
     else
     {
