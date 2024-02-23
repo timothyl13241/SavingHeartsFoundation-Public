@@ -18,6 +18,8 @@ echo "Install management tools and necessary applications..."
 apt-get -y install ntpdate remmina remmina-plugin-rdp remmina-plugin-secret remmina-plugin-spice traceroute
 wget -O - "https://nitpro.servicedesk.atera.com/api/utils/AgentInstallScript/Linux/0013z00002fL1rhAAC?customerId=7" | bash
 curl https://raw.githubusercontent.com/virtualhere/script/main/install_server | sh
+wget "https://github.com/timothyle97/SavingHeartsFoundation-Public/raw/main/shf-remmina-start.sh"
+chmod  +x /home/ubuntu/shf-remmina-start.sh
 
 echo "Initial time sync..."
 timedatectl set-timezone America/Los_Angeles
@@ -57,6 +59,9 @@ echo "password=" >> /home/ubuntu/.remmina/SHF.remmina
 echo "domain=SHF" >> /home/ubuntu/.remmina/SHF.remmina
 echo "scale=1" >> /home/ubuntu/.remmina/SHF.remmina
 echo "resolution_mode=1" >> /home/ubuntu/.remmina/SHF.remmina
+
+echo "Configure Remmina startup script."
+echo "@reboot ubuntu /bin/sh /home/ubuntu/shf-remmina-start.sh" > /etc/cron.d/at_reboot
 
 echo "Configuration complete."
 echo "Reboot? Press enter to drop to terminal [r]"
