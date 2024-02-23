@@ -39,7 +39,7 @@ echo "AllowHybridSleep=no" >> /etc/systemd/sleep.conf
 
 echo "Add WiFi network..."
 read -p "Enter AP1764 password: " pass
-nmcli device wifi connect "AP1764" password "$pass"
+#nmcli device wifi connect "AP1764" password "$pass"
 
 echo "Configure Remmina profile..."
 read -p "Enter terminal server IP: " rip
