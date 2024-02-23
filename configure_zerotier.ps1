@@ -189,7 +189,7 @@ else
 {
     #Download and install UEMS Agent. 
     Write-Host "Installing ManageEngine Agent!"
-    Invoke-WebRequest -Uri "https://desktopcentral.manageengine.com/download?encapiKey=wSsVR6118hf4Da99yjKkL%2Bc7nlxXVV2jQU15jlPzunapHf7LpcdonxedVAKiGfAXFDQ%2FRTIXrbt8nEtSgDQH3t0uyVoEXSiF9mqRe1U4J3x1rb26lDTKX2Q%3D" -OutFile "C:\MOBILENET_Agent.exe"
+    Invoke-WebRequest -Uri "https://desktopcentral.manageengine.com/download?encapiKey=wSsVR6118hf4Da99yjKkL%2Bc7nlxXVV2jQU15jlPzunapHf7LpcdonxedVAKiGfAXFDQ%2FRTIXrbt8nEtSgDQH3t0uyVoEXSiF9mqRe1U4J3x1rb26lDTKX2Q%3D&os=Windows" -OutFile "C:\MOBILENET_Agent.exe"
     if (Test-Path "C:\MOBILENET_Agent.exe")
     {
         $UEMSInstallStatus = (Start-Process -FilePath "C:\MOBILENET_Agent.exe" -ArgumentList "/silent" -Wait -PassThru).ExitCode
