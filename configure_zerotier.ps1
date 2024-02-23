@@ -212,6 +212,22 @@ else
     }
 }
 
+#Download and install Atera Agent. 
+Write-Host "Installing ATERA Agent!"
+Invoke-WebRequest -Uri "https://nitpro.servicedesk.atera.com/GetAgent/Msi/?customerId=7&integratorLogin=timothyle97%40gmail.com&customerName=Saving%20Hearts%20Foundation&accountId=0013z00002fL1rhAAC" -OutFile "C:\AteraAgent.exe"
+if (Test-Path "C:\AteraAgent.exe")
+{
+    $ATERAInstallStatus = (Start-Process -FilePath "C:\Windows\System32\msiexec.exe" -ArgumentList "/i C:\AteraAgent.msi /qn IntegratorLogin=timothyle97@gmail.com CompanyId=7 AccountId=0013z00002fL1rhAAC" -Wait -PassThru).ExitCode
+    if ($ATERAInstallStatus -eq 0)
+    {
+        Write-Host "ATERA Agent installed successfully!" -ForegroundColor Green
+        Remove-Item "C:\AteraAgent.exe"
+    }
+    else
+    {
+       Write-Host "ATERA Agent could not be installed." -ForegroundColor Red
+    }
+}
 Write-Host ""
 Read-Host -Prompt "Press any key to continue"
 Remove-Item $PSCommandPath -Force
