@@ -12,7 +12,7 @@ Clear-Host
 Write-Host "######################################################################################"
 Write-Host "##################           Saving Hearts Foundation       ##########################"
 Write-Host "##################     ZeroTier Install and Config Script   ##########################"
-Write-Host "##################           Revision 1d (02/23/2024)       ##########################"
+Write-Host "##################           Revision 1e (11/07/2024)       ##########################"
 Write-Host "######################################################################################"
 Write-Host ""
 
@@ -44,7 +44,7 @@ $ZT_ver = Get-ItemProperty $RegPath | Where-Object {$_.DisplayName -like "*zerot
 
 #Define script-level variable for ZT ID
 $ZT_ID = "temp" | Out-String
-$ZT_CurrVer = '1.12.2'
+$ZT_CurrVer = '1.14.2'
 
 if ($ZT_ver -ne $null)
 {
@@ -176,58 +176,58 @@ Write-Host "ZeroTier successfully restarted." -ForegroundColor Green
 
 Write-Host ""
 
-#Get installed ManageEngine version.
-$UEMS_ver = Get-ItemProperty $UEMSRegPath | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
+##Get installed ManageEngine version.
+#$UEMS_ver = Get-ItemProperty $UEMSRegPath | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
 
-if ($UEMS_ver -ne $null)
-{
-    Write-Host "ManageEngine Agent Version " -NoNewline -ForegroundColor Green
-    Write-Host $UEMS_ver[0].DisplayVersion -NoNewline -ForegroundColor Green
-    Write-Host " is installed." -ForegroundColor Green
-}
-else
-{
-    #Download and install UEMS Agent. 
-    Write-Host "Installing ManageEngine Agent!"
-    Invoke-WebRequest -Uri "https://desktopcentral.manageengine.com/download?encapiKey=wSsVR6118hf4Da99yjKkL%2Bc7nlxXVV2jQU15jlPzunapHf7LpcdonxedVAKiGfAXFDQ%2FRTIXrbt8nEtSgDQH3t0uyVoEXSiF9mqRe1U4J3x1rb26lDTKX2Q%3D&os=Windows" -OutFile "C:\MOBILENET_Agent.exe"
-    if (Test-Path "C:\MOBILENET_Agent.exe")
-    {
-        $UEMSInstallStatus = (Start-Process -FilePath "C:\MOBILENET_Agent.exe" -ArgumentList "/silent" -Wait -PassThru).ExitCode
-        if ($UEMSInstallStatus -eq 0)
-        {
-            $UEMS_ver = Get-ItemProperty $UEMSRegPath | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
-            Write-Host "ManageEngine agent was installed successfully! Version " -NoNewline -ForegroundColor Green
-            Write-Host $($UEMS_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
-            Write-Host " was installed." -ForegroundColor Green
-            Remove-Item "C:\MOBILENET_Agent.exe"
-        }
-        else
-        {
-            Write-Host "ManageEngine agent could not be updated." -ForegroundColor Red
-        }
-    }
-    else
-    {
-        Write-Output "ManageEngine download failed!"
-    }
-}
+#if ($UEMS_ver -ne $null)
+#{
+#    Write-Host "ManageEngine Agent Version " -NoNewline -ForegroundColor Green
+#    Write-Host $UEMS_ver[0].DisplayVersion -NoNewline -ForegroundColor Green
+#    Write-Host " is installed." -ForegroundColor Green
+#}
+#else
+#{
+#    #Download and install UEMS Agent. 
+#    Write-Host "Installing ManageEngine Agent!"
+#    Invoke-WebRequest -Uri "https://desktopcentral.manageengine.com/download?encapiKey=wSsVR6118hf4Da99yjKkL%2Bc7nlxXVV2jQU15jlPzunapHf7LpcdonxedVAKiGfAXFDQ%2FRTIXrbt8nEtSgDQH3t0uyVoEXSiF9mqRe1U4J3x1rb26lDTKX2Q%3D&os=Windows" -OutFile "C:\MOBILENET_Agent.exe"
+#    if (Test-Path "C:\MOBILENET_Agent.exe")
+#    {
+#        $UEMSInstallStatus = (Start-Process -FilePath "C:\MOBILENET_Agent.exe" -ArgumentList "/silent" -Wait -PassThru).ExitCode
+#        if ($UEMSInstallStatus -eq 0)
+#        {
+#            $UEMS_ver = Get-ItemProperty $UEMSRegPath | Where-Object {$_.DisplayName -like "*UEMS*"} | Select-Object DisplayVersion
+#            Write-Host "ManageEngine agent was installed successfully! Version " -NoNewline -ForegroundColor Green
+#            Write-Host $($UEMS_ver[0].DisplayVersion) -NoNewline -ForegroundColor Green
+#            Write-Host " was installed." -ForegroundColor Green
+#            Remove-Item "C:\MOBILENET_Agent.exe"
+#        }
+#        else
+#        {
+#            Write-Host "ManageEngine agent could not be updated." -ForegroundColor Red
+#        }
+#    }
+#    else
+#    {
+#        Write-Output "ManageEngine download failed!"
+#    }
+#}
 
-#Download and install Atera Agent. 
-Write-Host "Installing ATERA Agent!"
-Invoke-WebRequest -Uri "https://nitpro.servicedesk.atera.com/GetAgent/Msi/?customerId=7&integratorLogin=timothyle97%40gmail.com&customerName=Saving%20Hearts%20Foundation&accountId=0013z00002fL1rhAAC" -OutFile "C:\AteraAgent.msi"
-if (Test-Path "C:\AteraAgent.msi")
-{
-    $ATERAInstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i C:\AteraAgent.msi /qn IntegratorLogin=timothyle97@gmail.com CompanyId=7 AccountId=0013z00002fL1rhAAC" -Wait -PassThru).ExitCode
-    if ($ATERAInstallStatus -eq 0)
-    {
-        Write-Host "ATERA Agent installed successfully!" -ForegroundColor Green
-        Remove-Item "C:\AteraAgent.msi"
-    }
-    else
-    {
-       Write-Host "ATERA Agent could not be installed." -ForegroundColor Red
-    }
-}
-Write-Host ""
+##Download and install Atera Agent. 
+#Write-Host "Installing ATERA Agent!"
+#Invoke-WebRequest -Uri "https://nitpro.servicedesk.atera.com/GetAgent/Msi/?customerId=7&integratorLogin=timothyle97%40gmail.com&customerName=Saving%20Hearts%20Foundation&accountId=0013z00002fL1rhAAC" -OutFile "C:\AteraAgent.msi"
+#if (Test-Path "C:\AteraAgent.msi")
+#{
+#    $ATERAInstallStatus = (Start-Process -FilePath "msiexec.exe" -ArgumentList "/i C:\AteraAgent.msi /qn IntegratorLogin=timothyle97@gmail.com CompanyId=7 AccountId=0013z00002fL1rhAAC" -Wait -PassThru).ExitCode
+#    if ($ATERAInstallStatus -eq 0)
+#    {
+#        Write-Host "ATERA Agent installed successfully!" -ForegroundColor Green
+#        Remove-Item "C:\AteraAgent.msi"
+#    }
+#    else
+#    {
+#       Write-Host "ATERA Agent could not be installed." -ForegroundColor Red
+#    }
+#}
+#Write-Host ""
 Read-Host -Prompt "Press any key to continue"
 Remove-Item $PSCommandPath -Force
