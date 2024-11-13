@@ -56,7 +56,9 @@ if ($ZT_ver -ne $null)
     }
     elseif (($ZT_ver[0].DisplayVersion -ne $ZT_CurrVer ) -and ($ZT_ver[0].DisplayVersion -ne $null))
     {
-        Write-Host "ZeroTier is not up to date! Updating now..." -ForegroundColor Yellow
+        Write-Host "ZeroTier is not up to date! (" -NoNewline -ForegroundColor Yellow
+        Write-Host $ZT_ver[0].DisplayVersion -NoNewline -ForegroundColor Yellow
+        Write-Host ") Updating now..." -ForegroundColor Yellow
         Write-Host ""
         #Download and install newer ZeroTier version.
         Invoke-WebRequest -URI "https://download.zerotier.com/dist/ZeroTier%20One.msi" -OutFile "C:\ZeroTier One.msi"
@@ -83,7 +85,7 @@ if ($ZT_ver -ne $null)
     }
     #Check if moons are orbited.
     $NetStatus = & $ZT_path -q listmoons | Out-String
-    if ($NetStatus.Trim() -eq '')
+    if ($NetStatus.Trim() -eq '[]')
     {
         Write-Host "Custom moons have not yet been orbited!"
         Start-Process -FilePath $ZT_path -ArgumentList "-q orbit 7549d395fe 7549d395fe" -Wait
@@ -136,7 +138,7 @@ else
             }
 
             $NetStatus = & $ZT_path -q listmoons | Out-String
-            if ($NetStatus.Trim() -eq '')
+            if ($NetStatus.Trim() -eq '[]')
             {
                 Write-Host "Custom moons have not yet been orbited!"
                 Start-Process -FilePath $ZT_path -ArgumentList "-q orbit 7549d395fe 7549d395fe"
