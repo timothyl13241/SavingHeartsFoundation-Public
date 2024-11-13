@@ -90,6 +90,7 @@ if ($ZT_ver -ne $null)
         Write-Host "Custom moons have not yet been orbited!"
         Start-Process -FilePath $ZT_path -ArgumentList "-q orbit 7549d395fe 7549d395fe" -Wait
         Start-Process -FilePath $ZT_path -ArgumentList "-q orbit 9821a6b432 9821a6b432" -Wait
+        Start-Sleep -Seconds 10
         Write-Host "Added moons to orbit."
     }
     else
@@ -97,6 +98,7 @@ if ($ZT_ver -ne $null)
         Write-Host "Custom moons already orbited!"
         Start-Process -FilePath $ZT_path -ArgumentList "-q deorbit 85fb50d876" -Wait
         Start-Process -FilePath $ZT_path -ArgumentList "-q orbit 9821a6b432 9821a6b432" -Wait
+        Start-Sleep -Seconds 10
     }
 }
 else
@@ -143,6 +145,7 @@ else
                 Write-Host "Custom moons have not yet been orbited!"
                 Start-Process -FilePath $ZT_path -ArgumentList "-q orbit 7549d395fe 7549d395fe"
                 Start-Process -FilePath $ZT_path -ArgumentList "-q orbit 9821a6b432 9821a6b432"
+                Start-Sleep -Seconds 10
             }
             else
             {
