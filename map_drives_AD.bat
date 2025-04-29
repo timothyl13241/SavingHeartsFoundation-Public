@@ -20,8 +20,8 @@ echo:
 echo ######################################################################################
 echo:
 net use * /delete /y
-net use S: \\172.30.16.234\UCLA_SHF_Data /p:yes
-net use U: \\172.30.16.234\UCLA_Deployment /p:yes
+net use S: \\172.17.16.234\UCLA_SHF_Data /p:yes
+net use U: \\172.17.16.234\UCLA_Deployment /p:yes
 pause
 echo ######################################################################################
 echo Here are the currently mapped drives:
