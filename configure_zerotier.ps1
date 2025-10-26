@@ -44,7 +44,7 @@ $ZT_ver = Get-ItemProperty $RegPath | Where-Object {$_.DisplayName -like "*zerot
 
 #Define script-level variable for ZT ID
 $ZT_ID = "temp" | Out-String
-$ZT_CurrVer = '1.14.2'
+$ZT_CurrVer = '1.60.0'
 
 if ($ZT_ver -ne $null)
 {
