@@ -126,12 +126,12 @@ else
             Write-Host "Configuring ZeroTier now."
             Write-Host "#########################"
             Write-Host ""
-            $ConfigStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q join 632ea2908589098f | Out-String
+            $ConfigStatus = C:\ProgramData\ZeroTier\One\zerotier-one_x64.exe -q join e5794e38d341d991 | Out-String
             if ($ConfigStatus.Trim() -eq "200 join OK")
             {
                 Write-Host "Successfully joined SHF ZeroTier network!" -ForegroundColor Green
                 Write-Host "Please contact your network admin with the above ID to enable this device." -ForegroundColor Green
-                Start-Process -FilePath $ZT_path -ArgumentList "-q set 632ea2908589098f allowDNS=1"
+                Start-Process -FilePath $ZT_path -ArgumentList "-q set e5794e38d341d991 allowDNS=1"
                 Set-NetConnectionProfile -InterfaceAlias ZeroTier* -NetworkCategory Private
             }
             else
