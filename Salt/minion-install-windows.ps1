@@ -11,7 +11,7 @@ Read-Host -Prompt "Please reach out to your admin to authorize the minion key. T
 
 # Prompt for EKG connection type
 do {
-    $ekgConnection = Read-Host -Prompt "Is this laptop using a USB or Bluetooth EKG? (Enter 'usb' or 'bluetooth')"
+    $ekgConnection = Read-Host -Prompt "Is this laptop using a USB or Bluetooth EKG? (Enter 'usb' or 'bluetooth'): "
     $ekgConnection = $ekgConnection.ToLower().Trim()
 } while ($ekgConnection -ne "usb" -and $ekgConnection -ne "bluetooth")
 
