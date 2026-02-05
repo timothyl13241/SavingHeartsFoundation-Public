@@ -7,5 +7,5 @@ Start-Service -Name "salt-minion"
 Set-Service -Name "salt-minion" -StartupType Automatic
 cd "C:\Program Files\Salt Project\Salt\"
 .\salt-call.exe test.ping
-Read-Host -Prompt "Get with your admin to authorize the minion key. Then press Enter to continue"
+Read-Host -Prompt "Please reach out to your admin to authorize the minion key. Then press Enter to continue"
 .\salt-call.exe state.highstate
