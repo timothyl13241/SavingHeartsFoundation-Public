@@ -5,3 +5,5 @@ Invoke-WebRequest -Uri $msiUrl -OutFile $msiPath
 Start-Process msiexec.exe -ArgumentList "/i `"$msiPath`" MASTER=salt.internal.savingheartsfoundation.com /qn" -Wait
 Start-Service -Name "salt-minion"
 Set-Service -Name "salt-minion" -StartupType Automatic
+cd "C:\Program Files\Salt Project\Salt\"
+.\salt-call.exe state.highstate
