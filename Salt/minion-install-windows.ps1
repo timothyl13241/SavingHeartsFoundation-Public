@@ -6,7 +6,7 @@ Start-Process msiexec.exe -ArgumentList "/i `"$msiPath`" MASTER=salt.internal.sa
 Start-Service -Name "salt-minion"
 Set-Service -Name "salt-minion" -StartupType Automatic
 cd "C:\Program Files\Salt Project\Salt\"
-.\salt-call.exe test.ping
+.\salt-call.exe test.ping | Out-Null
 Read-Host -Prompt "Please reach out to your admin to authorize the minion key. Then press Enter to continue"
 
 # Prompt for EKG connection type
